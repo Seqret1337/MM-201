@@ -12,6 +12,7 @@ async function askQuestion(question) {
 import { ANSI } from './ansi.mjs';
 import { HANGMAN_UI } from './graphics.mjs';
 import { readFileSync } from 'node:fs';
+import { TEXT } from './text.mjs';
 
 let loopGame = true;
 let totalWrongGuesses = 0;
@@ -58,9 +59,8 @@ while (loopGame) {
         console.log(drawWordDisplay());
         console.log(drawList(wrongGuesses, ANSI.COLOR.RED));
         console.log(HANGMAN_UI[wrongGuesses.length]);
-        console.log(wrongGuesses);
 
-        const answer = (await askQuestion("Guess a character or the word : ")).toLowerCase();
+        const answer = (await askQuestion(TEXT.GUESSLETTER)).toLowerCase();
 
         if (answer == correctWord) {
             totalWordsGuessed++;
@@ -105,16 +105,16 @@ while (loopGame) {
     console.log(HANGMAN_UI[wrongGuesses.length]);
 
     if (wasGuessCorrect) {
-        console.log(ANSI.COLOR.YELLOW + "Congratulation, winer winner chicken dinner" + ANSI.RESET);
+        console.log(ANSI.COLOR.YELLOW + TEXT.YOUWON + ANSI.RESET);
     }
-    console.log("Game Over");
-    console.log("The word was " + correctWord);
+    console.log(TEXT.GAMEOVER);
+    console.log(TEXT.THEWORDWAS + correctWord);
     
     function PlayerGuesses(answer) {
         return answer.length;
     }
 
-    const playAgain = (await askQuestion("Type 1 if you want to play again or any letter to stop: ")).toLowerCase();
+    const playAgain = (await askQuestion(TEXT.PLAYONEMORETIME)).toLowerCase();
     if (playAgain == "1") {
         loopGame = true;
     } else {
@@ -122,12 +122,12 @@ while (loopGame) {
     }
 }
 console.log(ANSI.CLEAR_SCREEN);
-console.log("Thank you for playing");
-console.log("Total wrong guesses: " + totalWrongGuesses);
-console.log("Total words guessed: " + totalWordsGuessed);
-console.log("Rounds played: " + roundsPlayed);
+console.log(TEXT.THANKYOU4PLAYING);
+console.log(TEXT.TOTALWRONGGUESSES + ANSI.COLOR.RED + totalWrongGuesses + ANSI.RESET);
+console.log(TEXT.TOTALWORDSGUESSED + ANSI.COLOR.GREEN + totalWordsGuessed + ANSI.RESET);
+console.log(TEXT.ROUNDSPLAYED + ANSI.COLOR.YELLOW + roundsPlayed + ANSI.RESET);
 
-const exitProgram = (await askQuestion("Type any letter to exit the program: ")).toLowerCase();
+const exitProgram = (await askQuestion(TEXT.EXITTHEPROGRAM)).toLowerCase();
 if (exitProgram == exitProgram) {
     console.log(ANSI.CLEAR_SCREEN);
     process.exit();
