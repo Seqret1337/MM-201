@@ -87,8 +87,6 @@ while (loopGame) {
                     wrongGuesses.push("");
                     totalWrongGuesses++;
                 }
-            } else if (isCorrect == true) {
-                wrongGuesses.push("");
             } else if (guessedWord == correctWord) {
                 gameIsOver = true;
                 wasGuessCorrect = true;
