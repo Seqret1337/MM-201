@@ -121,7 +121,7 @@ while (loopGame) {
     if (playAgain == 1) {
         loopGame = true;
     } else {
-        loopGame == false;
-        process.exit();
+        loopGame = false;
     }
 }
+console.log("stats");
