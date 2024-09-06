@@ -12,7 +12,6 @@ async function askQuestion(question) {
 import { ANSI } from './ansi.mjs';
 import { HANGMAN_UI } from './graphics.mjs';
 import { readFileSync } from 'node:fs';
-import { devNull } from 'node:os';
 
 let loopGame = true;
 
@@ -72,8 +71,7 @@ while (loopGame) {
                 if (correctWord[i] == answer) {
                     guessedWord += answer;
                     isCorrect = true;
-                } else {
-                    // If the currents answer is not what is in the space, we should keep the char that is allready in that space. 
+                } else { 
                     guessedWord += org[i];
                 }
             }
@@ -89,15 +87,12 @@ while (loopGame) {
             } 
         }
 
-        // Read as "Has the player made to many wrong guesses". 
-        // This works because we cant have more wrong guesses then we have drawings. 
         if (wrongGuesses.length == HANGMAN_UI.length -1) {
             isGameOver = true;
         }
 
     }
 
-    // OUR GAME HAS ENDED.
     console.log(ANSI.CLEAR_SCREEN);
     console.log(drawWordDisplay());
     console.log(drawList(wrongGuesses, ANSI.COLOR.RED));
