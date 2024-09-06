@@ -14,6 +14,7 @@ import { HANGMAN_UI } from './graphics.mjs';
 import { readFileSync } from 'node:fs';
 
 let loopGame = true;
+let totalWrongGuesses = 0;
 
 while (loopGame) {
     const collectWordsFromTxt = readFileSync('./words.txt').toString('utf8').split("\r\n");
@@ -23,7 +24,6 @@ while (loopGame) {
     let wordDisplay = "";
     let isGameOver = false;
     let wasGuessCorrect = false;
-    let totalWrongGuesses = 0;
     let wrongGuesses = [];
 
     function drawWordDisplay() {
@@ -79,8 +79,10 @@ while (loopGame) {
             if (isCorrect == false) {
                 if (wrongGuesses.includes(answer) == false) {
                     wrongGuesses.push(answer);
+                    totalWrongGuesses++;
                 } else {
                     wrongGuesses.push("");
+                    totalWrongGuesses++;
                 }
             } else if (guessedWord == correctWord) {
                 isGameOver = true;
@@ -88,17 +90,15 @@ while (loopGame) {
             } 
         }
 
-        if (wrongGuesses.length == HANGMAN_UI.length -1) {
+        if (wrongGuesses.length == HANGMAN_UI.length - 1) {
             isGameOver = true;
         }
-
     }
 
     console.log(ANSI.CLEAR_SCREEN);
     console.log(drawWordDisplay());
     console.log(drawList(wrongGuesses, ANSI.COLOR.RED));
     console.log(HANGMAN_UI[wrongGuesses.length]);
-    wrongGuesses.length = totalWrongGuesses;
 
     if (wasGuessCorrect) {
         console.log(ANSI.COLOR.YELLOW + "Congratulation, winer winner chicken dinner" + ANSI.RESET);
@@ -109,7 +109,7 @@ while (loopGame) {
     function PlayerGuesses(answer) {
         return answer.length;
     }
-    
+
     const playAgain = (await askQuestion("Type 1 if you want to play again or any letter to stop: ")).toLowerCase();
     if (playAgain == "1") {
         loopGame = true;
@@ -117,10 +117,11 @@ while (loopGame) {
         loopGame = false;
     }
 }
-
+console.log(ANSI.CLEAR_SCREEN);
 console.log("Thank you for playing");
 console.log("Total wrong guesses: " + totalWrongGuesses);
 const exitProgram = (await askQuestion("Type any letter to exit the program: ")).toLowerCase();
 if (exitProgram == exitProgram) {
+    console.log(ANSI.CLEAR_SCREEN);
     process.exit();
 }
