@@ -119,7 +119,7 @@ while (loopGame) {
         return answer.length;
     }
     
-    const playAgain = (await askQuestion("Type 1 if you want to play again or 2 to stop ")).toLowerCase();
+    const playAgain = (await askQuestion("Type 1 if you want to play again or any letter to stop: ")).toLowerCase();
     if (playAgain == 1) {
         loopGame = true;
     } else {
