@@ -22,26 +22,26 @@ let roundsPlayed = 0;
 while (loopGame) {
     const collectWordsFromTxt = readFileSync('./words.txt').toString('utf8').split("\r\n");
     const correctWord = collectWordsFromTxt[Math.floor(Math.random()*collectWordsFromTxt.length)].toLowerCase();
-    const numberOfCharInWord = correctWord.length;
+    const numberOfCharachtersInWord = correctWord.length;
     let guessedWord = "".padStart(correctWord.length, "_"); // "" is an empty string that we then fill with _ based on the number of char in the correct word.
-    let wordDisplay = "";
-    let isGameOver = false;
+    let showWords = "";
+    let gameIsOver = false;
     let wasGuessCorrect = false;
     let wrongGuesses = [];
 
     function drawWordDisplay() {
 
-        wordDisplay = "";
+        showWords = "";
 
-        for (let i = 0; i < numberOfCharInWord; i++) {
+        for (let i = 0; i < numberOfCharachtersInWord; i++) {
             if (guessedWord[i] != "_") {
-                wordDisplay += ANSI.COLOR.GREEN;
+                showWords += ANSI.COLOR.GREEN;
             }
-            wordDisplay = wordDisplay + guessedWord[i] + " ";
-            wordDisplay += ANSI.RESET;
+            showWords = showWords + guessedWord[i] + " ";
+            showWords += ANSI.RESET;
         }
 
-        return wordDisplay;
+        return showWords;
     }
 
     function drawList(list, color) {
@@ -53,7 +53,7 @@ while (loopGame) {
         return output + ANSI.RESET;
     }
 
-    while (isGameOver == false) {
+    while (gameIsOver == false) {
 
         console.log(ANSI.CLEAR_SCREEN);
         console.log(drawWordDisplay());
@@ -64,7 +64,7 @@ while (loopGame) {
 
         if (answer == correctWord) {
             totalWordsGuessed++;
-            isGameOver = true;
+            gameIsOver = true;
             wasGuessCorrect = true;     
         } else if (PlayerGuesses(answer)) {
             let org = guessedWord;
@@ -88,14 +88,14 @@ while (loopGame) {
                     totalWrongGuesses++;
                 }
             } else if (guessedWord == correctWord) {
-                isGameOver = true;
+                gameIsOver = true;
                 wasGuessCorrect = true;
             } 
         }
 
         if (wrongGuesses.length == HANGMAN_UI.length - 1) {
             roundsPlayed++;
-            isGameOver = true;
+            gameIsOver = true;
         }
     }
 
