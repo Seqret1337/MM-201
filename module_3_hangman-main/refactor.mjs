@@ -23,6 +23,7 @@ while (loopGame) {
     let wordDisplay = "";
     let isGameOver = false;
     let wasGuessCorrect = false;
+    let totalWrongGuesses = 0;
     let wrongGuesses = [];
 
     function drawWordDisplay() {
@@ -97,6 +98,7 @@ while (loopGame) {
     console.log(drawWordDisplay());
     console.log(drawList(wrongGuesses, ANSI.COLOR.RED));
     console.log(HANGMAN_UI[wrongGuesses.length]);
+    wrongGuesses.length = totalWrongGuesses;
 
     if (wasGuessCorrect) {
         console.log(ANSI.COLOR.YELLOW + "Congratulation, winer winner chicken dinner" + ANSI.RESET);
@@ -117,9 +119,8 @@ while (loopGame) {
 }
 
 console.log("Thank you for playing");
+console.log("Total wrong guesses: " + totalWrongGuesses);
 const exitProgram = (await askQuestion("Type any letter to exit the program: ")).toLowerCase();
 if (exitProgram == exitProgram) {
     process.exit();
 }
-
-
