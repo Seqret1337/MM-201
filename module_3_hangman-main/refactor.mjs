@@ -124,7 +124,7 @@ while (loopGame) {
         loopGame = true;
     } else if (playAgain == 2) {
         loopGame == false;
-        process.exit();      
+        process.exit();
     }
 }
 
