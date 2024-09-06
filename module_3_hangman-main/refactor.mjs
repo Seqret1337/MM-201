@@ -14,17 +14,49 @@ import { HANGMAN_UI } from './graphics.mjs';
 import { readFileSync } from 'node:fs';
 
 let loopGame = true;
-const collectWordsFromTxt = readFileSync('./words.txt').toString('utf8').split("\r\n");
-const correctWord = collectWordsFromTxt[Math.floor(Math.random()*collectWordsFromTxt.length)].toLowerCase();
-const numberOfCharInWord = correctWord.length;
-let guessedWord = "".padStart(correctWord.length, "_"); // "" is an empty string that we then fill with _ based on the number of char in the correct word.
-let wordDisplay = "";
 
-while (loopGame == true) {
-
+while (loopGame) {
+    const collectWordsFromTxt = readFileSync('./words.txt').toString('utf8').split("\r\n");
+    const correctWord = collectWordsFromTxt[Math.floor(Math.random()*collectWordsFromTxt.length)].toLowerCase();
+    const numberOfCharInWord = correctWord.length;
+    let guessedWord = "".padStart(correctWord.length, "_"); // "" is an empty string that we then fill with _ based on the number of char in the correct word.
+    let wordDisplay = "";
     let isGameOver = false;
     let wasGuessCorrect = false;
     let wrongGuesses = [];
+
+    //wordDisplay += ANSI.COLOR.GREEN;
+
+    function drawWordDisplay() {
+
+        wordDisplay = "";
+
+        for (let i = 0; i < numberOfCharInWord; i++) {
+            //i == 0, wordDisplay == "", guessedWord[0] == "_";
+            //i == 1, wordDisplay == "_ ", guessedWord[1] == "_";
+            //i == 2, wordDisplay == "_ _ ", guessedWord[2] == "_";
+            if (guessedWord[i] != "_") {
+                wordDisplay += ANSI.COLOR.GREEN;
+            }
+            wordDisplay = wordDisplay + guessedWord[i] + " ";
+            wordDisplay += ANSI.RESET;
+            //i == 0, wordDisplay == "_ ", guessedWord[0] == "_";
+            //i == 1, wordDisplay == "_ _ ", guessedWord[1] == "_";
+            //i == 2, wordDisplay == "_ _ _", guessedWord[2] == "_";
+        }
+
+        return wordDisplay;
+    }
+
+    function drawList(list, color) {
+        let output = color;
+        for (let i = 0; i < list.length; i++) {
+            output += list[i] + " ";
+        }
+
+        return output + ANSI.RESET;
+    }
+
     // Continue playing until the game is over. 
     while (isGameOver == false) {
 
@@ -83,45 +115,15 @@ while (loopGame == true) {
     console.log("Game Over");
     console.log("The word was " + correctWord);
     
+    function ifPlayerGuessedLetter(answer) {
+        return answer.length;
+    }
+    
     const playAgain = (await askQuestion("Type 1 if you want to play again or 2 to stop ")).toLowerCase();
     if (playAgain == 1) {
         loopGame = true;
-    } else if (playAgain == 2) {
+    } else {
         loopGame == false;
-        process.exit();
+        process.exit();      
     }
-}
-//wordDisplay += ANSI.COLOR.GREEN;
-
-function drawWordDisplay() {
-
-    wordDisplay = "";
-
-    for (let i = 0; i < numberOfCharInWord; i++) {
-        //i == 0, wordDisplay == "", guessedWord[0] == "_";
-        //i == 1, wordDisplay == "_ ", guessedWord[1] == "_";
-        //i == 2, wordDisplay == "_ _ ", guessedWord[2] == "_";
-        if (guessedWord[i] != "_") {
-            wordDisplay += ANSI.COLOR.GREEN;
-        }
-        wordDisplay = wordDisplay + guessedWord[i] + " ";
-        wordDisplay += ANSI.RESET;
-        //i == 0, wordDisplay == "_ ", guessedWord[0] == "_";
-        //i == 1, wordDisplay == "_ _ ", guessedWord[1] == "_";
-        //i == 2, wordDisplay == "_ _ _", guessedWord[2] == "_";
-    }
-
-    return wordDisplay;
-}
-
-function drawList(list, color) {
-    let output = color;
-    for (let i = 0; i < list.length; i++) {
-        output += list[i] + " ";
-    }
-
-    return output + ANSI.RESET;
-}
-function ifPlayerGuessedLetter(answer) {
-    return answer.length;
 }
