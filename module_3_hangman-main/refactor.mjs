@@ -12,6 +12,7 @@ async function askQuestion(question) {
 import { ANSI } from './ansi.mjs';
 import { HANGMAN_UI } from './graphics.mjs';
 import { readFileSync } from 'node:fs';
+import { devNull } from 'node:os';
 
 let loopGame = true;
 
@@ -25,24 +26,16 @@ while (loopGame) {
     let wasGuessCorrect = false;
     let wrongGuesses = [];
 
-    //wordDisplay += ANSI.COLOR.GREEN;
-
     function drawWordDisplay() {
 
         wordDisplay = "";
 
         for (let i = 0; i < numberOfCharInWord; i++) {
-            //i == 0, wordDisplay == "", guessedWord[0] == "_";
-            //i == 1, wordDisplay == "_ ", guessedWord[1] == "_";
-            //i == 2, wordDisplay == "_ _ ", guessedWord[2] == "_";
             if (guessedWord[i] != "_") {
                 wordDisplay += ANSI.COLOR.GREEN;
             }
             wordDisplay = wordDisplay + guessedWord[i] + " ";
             wordDisplay += ANSI.RESET;
-            //i == 0, wordDisplay == "_ ", guessedWord[0] == "_";
-            //i == 1, wordDisplay == "_ _ ", guessedWord[1] == "_";
-            //i == 2, wordDisplay == "_ _ _", guessedWord[2] == "_";
         }
 
         return wordDisplay;
@@ -57,13 +50,13 @@ while (loopGame) {
         return output + ANSI.RESET;
     }
 
-    // Continue playing until the game is over. 
     while (isGameOver == false) {
 
         console.log(ANSI.CLEAR_SCREEN);
         console.log(drawWordDisplay());
         console.log(drawList(wrongGuesses, ANSI.COLOR.RED));
         console.log(HANGMAN_UI[wrongGuesses.length]);
+        console.log(wrongGuesses);
 
         const answer = (await askQuestion("Guess a character or the word : ")).toLowerCase();
 
@@ -71,7 +64,6 @@ while (loopGame) {
             isGameOver = true;
             wasGuessCorrect = true;     
         } else if (PlayerGuesses(answer)) {
-
             let org = guessedWord;
             guessedWord = "";
 
@@ -85,8 +77,12 @@ while (loopGame) {
                     guessedWord += org[i];
                 }
             }
-            if (isCorrect == false && wrongGuesses.includes(answer) == false) {
-                wrongGuesses.push(answer);
+            if (isCorrect == false) {
+                if (wrongGuesses.includes(answer) == false) {
+                    wrongGuesses.push(answer);
+                } else {
+                    wrongGuesses.push("");
+                }
             } else if (guessedWord == correctWord) {
                 isGameOver = true;
                 wasGuessCorrect = true;
@@ -118,10 +114,17 @@ while (loopGame) {
     }
     
     const playAgain = (await askQuestion("Type 1 if you want to play again or any letter to stop: ")).toLowerCase();
-    if (playAgain == 1) {
+    if (playAgain == "1") {
         loopGame = true;
     } else {
         loopGame = false;
     }
 }
-console.log("stats");
+
+console.log("Thank you for playing");
+const exitProgram = (await askQuestion("Type any letter to exit the program: ")).toLowerCase();
+if (exitProgram == exitProgram) {
+    process.exit();
+}
+
+
