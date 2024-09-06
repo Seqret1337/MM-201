@@ -15,6 +15,8 @@ import { readFileSync } from 'node:fs';
 
 let loopGame = true;
 let totalWrongGuesses = 0;
+let totalWordsGuessed = 0;
+let roundsPlayed = 0;
 
 while (loopGame) {
     const collectWordsFromTxt = readFileSync('./words.txt').toString('utf8').split("\r\n");
@@ -61,6 +63,7 @@ while (loopGame) {
         const answer = (await askQuestion("Guess a character or the word : ")).toLowerCase();
 
         if (answer == correctWord) {
+            totalWordsGuessed++;
             isGameOver = true;
             wasGuessCorrect = true;     
         } else if (PlayerGuesses(answer)) {
@@ -91,6 +94,7 @@ while (loopGame) {
         }
 
         if (wrongGuesses.length == HANGMAN_UI.length - 1) {
+            roundsPlayed++;
             isGameOver = true;
         }
     }
@@ -120,6 +124,9 @@ while (loopGame) {
 console.log(ANSI.CLEAR_SCREEN);
 console.log("Thank you for playing");
 console.log("Total wrong guesses: " + totalWrongGuesses);
+console.log("Total words guessed: " + totalWordsGuessed);
+console.log("Rounds played: " + roundsPlayed);
+
 const exitProgram = (await askQuestion("Type any letter to exit the program: ")).toLowerCase();
 if (exitProgram == exitProgram) {
     console.log(ANSI.CLEAR_SCREEN);
