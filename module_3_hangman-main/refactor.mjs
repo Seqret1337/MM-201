@@ -70,7 +70,7 @@ while (loopGame) {
         if (answer == correctWord) {
             isGameOver = true;
             wasGuessCorrect = true;     
-        } else if (ifPlayerGuessedLetter(answer)) {
+        } else if (PlayerGuesses(answer)) {
 
             let org = guessedWord;
             guessedWord = "";
@@ -85,8 +85,7 @@ while (loopGame) {
                     guessedWord += org[i];
                 }
             }
-
-            if (isCorrect == false) {
+            if (isCorrect == false && wrongGuesses.includes(answer) == false) {
                 wrongGuesses.push(answer);
             } else if (guessedWord == correctWord) {
                 isGameOver = true;
@@ -96,7 +95,7 @@ while (loopGame) {
 
         // Read as "Has the player made to many wrong guesses". 
         // This works because we cant have more wrong guesses then we have drawings. 
-        if (wrongGuesses.length == HANGMAN_UI.length) {
+        if (wrongGuesses.length == HANGMAN_UI.length -1) {
             isGameOver = true;
         }
 
@@ -107,7 +106,6 @@ while (loopGame) {
     console.log(drawWordDisplay());
     console.log(drawList(wrongGuesses, ANSI.COLOR.RED));
     console.log(HANGMAN_UI[wrongGuesses.length]);
-    console.log(wrongGuesses);
 
     if (wasGuessCorrect) {
         console.log(ANSI.COLOR.YELLOW + "Congratulation, winer winner chicken dinner" + ANSI.RESET);
@@ -115,7 +113,7 @@ while (loopGame) {
     console.log("Game Over");
     console.log("The word was " + correctWord);
     
-    function ifPlayerGuessedLetter(answer) {
+    function PlayerGuesses(answer) {
         return answer.length;
     }
     
@@ -124,6 +122,6 @@ while (loopGame) {
         loopGame = true;
     } else {
         loopGame == false;
-        process.exit();      
+        process.exit();
     }
 }
